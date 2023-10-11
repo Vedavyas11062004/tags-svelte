@@ -41,7 +41,7 @@
 
   onMount(() => {
     input.addEventListener("keydown", (event) => {
-      if (event.which === 13) {
+      if (event.key === "Enter" || event.keyCode === 13||event.which === 13) {
         event.preventDefault();
         const val = input.value
           .replace(/ /g, "")
