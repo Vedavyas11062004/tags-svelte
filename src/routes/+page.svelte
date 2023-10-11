@@ -41,7 +41,7 @@
 
   onMount(() => {
     input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.keyCode === 13||event.which === 13) {
+      if (event.key === "Enter" || event.keyCode === 13||event.which === 13 || event.key === "Return") {
         event.preventDefault();
         const val = input.value
           .replace(/ /g, "")
@@ -64,7 +64,7 @@
       }
     });
 
-    input.addEventListener("click", () => input.focus());
+    // input.addEventListener("click", () => input.focus());
   });
 
   function handleClick(innerText) {
