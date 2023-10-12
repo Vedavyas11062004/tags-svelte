@@ -148,11 +148,6 @@
       {/each}
     </ul>
   </div>
-  <div class="--debug">
-    <h3 style="color: white; font-family: 'Roboto'">
-      var Filter : <span id="filter" />
-    </h3>
-  </div>
 </div>
 
 <style>
