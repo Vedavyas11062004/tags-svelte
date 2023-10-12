@@ -35,7 +35,13 @@
   }
   function addText(val) {
     if (val !== "") {
-      filter = [...filter, { value: val, isTag: false }];
+      const textParts = val.split(/(\{\{.*?\}\})/); // Split text by {{...}}
+      const items = textParts.map((part) => {
+        return part.startsWith("{{") && part.endsWith("}}")
+          ? { value: part.slice(2, -2), isTag: true }
+          : { value: part, isTag: false };
+      });
+      filter = [...filter, ...items];
       showFilter();
     }
   }
@@ -53,7 +59,7 @@
         event.key === "Return"
       ) {
         event.preventDefault();
-        const val = input.value
+        const val = input.value;
         console.log("val: " + val);
         if (val.startsWith("{{") && val.endsWith("}}")) {
           console.log("in tag...");
