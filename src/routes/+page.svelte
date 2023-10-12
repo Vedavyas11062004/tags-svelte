@@ -41,7 +41,12 @@
 
   onMount(() => {
     input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.keyCode === 13||event.which === 13 || event.key === "Return") {
+      if (
+        event.key === "Enter" ||
+        event.keyCode === 13 ||
+        event.which === 13 ||
+        event.key === "Return"
+      ) {
         event.preventDefault();
         const val = input.value
           .replace(/ /g, "")
@@ -98,46 +103,53 @@
 </script>
 
 <div class="container">
-<div class="searchBar">
-  {#each filter as tag (tag)}
-    <span
-      class={selectedElements.includes(tag) ? "tag selected" : "tag"}
-      on:click={() => toggleSelect(tag)}
-    >
-      {tag}
-      <span class="remove" on:click={() => removeTag(tag)} />
-    </span>
-  {/each}
-  <input bind:this={input} type="text" name="search" placeholder="" size="1" />
-</div>
-<div class="searchList">
-  <div>
+  <div class="searchBar">
+    {#each filter as tag (tag)}
+      <span
+        class={selectedElements.includes(tag) ? "tag selected" : "tag"}
+        on:click={() => toggleSelect(tag)}
+      >
+        {tag}
+        <span class="remove" on:click={() => removeTag(tag)} />
+      </span>
+    {/each}
     <input
+      bind:this={input}
       type="text"
-      bind:value={searchTerm}
-      placeholder="Search..."
-      on:input={filterItems}
-      class="searchInput"
+      name="search"
+      placeholder=""
+      class="searchBarText"
     />
   </div>
+  <div class="searchList">
+    <div>
+      <input
+        type="text"
+        bind:value={searchTerm}
+        placeholder="Search..."
+        on:input={filterItems}
+        class="searchInput"
+      />
+    </div>
 
-  <ul class="elements">
-    {#each filteredItems as item (item)}
-      <li class="element" on:click={() => handleClick(item)}>{item}</li>
-    {/each}
-  </ul>
+    <ul class="elements">
+      {#each filteredItems as item (item)}
+        <li class="element" on:click={() => handleClick(item)}>{item}</li>
+      {/each}
+    </ul>
+  </div>
+  <div class="--debug">
+    <h3 style="color: white; font-family: 'Roboto'">
+      var Filter : <span id="filter" />
+    </h3>
+  </div>
 </div>
-<div class="--debug">
-  <h3 style="color: white; font-family: 'Roboto'">
-    var Filter : <span id="filter" />
-  </h3>
-</div>
-</div>
+
 <style>
-  *{
+  * {
     font-family: sans-serif;
   }
-  .container{
+  .container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -189,17 +201,20 @@
     padding: 0%;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
-  .elements:hover{
+  .elements:hover {
     cursor: pointer;
   }
-  .searchList{
+  .searchList {
     border: 1px solid black;
     width: fit-content;
     padding: 1rem;
   }
-  .searchInput{
+  .searchInput {
     height: 30px;
+  }
+  .searchBarText:focus{
+    outline: none;
   }
 </style>
