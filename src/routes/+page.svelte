@@ -3,7 +3,7 @@
 
   import { onMount } from "svelte";
 
-  let filter = ["test"];
+  let filter = [{ value: "test", isTag: true }];
   let input;
   let selectedElements = [];
 
@@ -23,7 +23,7 @@
 
   function addTag(val) {
     if (!filter.includes(val)) {
-      filter = [...filter, val];
+      filter = [...filter, { value: val, isTag: true }];
     } else {
       document.querySelectorAll(".tag").forEach((tag) => {
         if (tag.textContent == val) {
@@ -33,9 +33,14 @@
     }
     showFilter();
   }
-
+  function addText(val) {
+    if (val !== "") {
+      filter = [...filter, { value: val, isTag: false }];
+      showFilter();
+    }
+  }
   function removeTag(text) {
-    filter = filter.filter((tag) => tag !== text);
+    filter = filter.filter((tag) => tag.value !== text);
     showFilter();
   }
 
@@ -49,13 +54,13 @@
       ) {
         event.preventDefault();
         const val = input.value
-          .replace(/ /g, "")
-          .replace(/[^a-z0-9\s]/gi, "")
-          .replace(/[_\s]/g, "-")
-          .toLowerCase();
-        if (val == "") return false;
-
-        addTag(val);
+        console.log("val: " + val);
+        if (val.startsWith("{{") && val.endsWith("}}")) {
+          console.log("in tag...");
+          addTag(val.slice(2, -2));
+        } else {
+          addText(val);
+        }
         input.value = "";
       }
     });
@@ -104,15 +109,20 @@
 
 <div class="container">
   <div class="searchBar">
-    {#each filter as tag (tag)}
-      <span
-        class={selectedElements.includes(tag) ? "tag selected" : "tag"}
-        on:click={() => toggleSelect(tag)}
-      >
-        {tag}
-        <span class="remove" on:click={() => removeTag(tag)} />
-      </span>
+    {#each filter as item (item)}
+      {#if item.isTag}
+        <span
+          class={selectedElements.includes(item.value) ? "tag selected" : "tag"}
+          on:click={() => toggleSelect(item.value)}
+        >
+          {item.value}
+          <span class="remove" on:click={() => removeTag(item.value)} />
+        </span>
+      {:else}
+        <span class="text">{item.value}</span>
+      {/if}
     {/each}
+
     <input
       bind:this={input}
       type="text"
@@ -214,7 +224,15 @@
   .searchInput {
     height: 30px;
   }
-  .searchBarText:focus{
+  .searchBarText:focus {
     outline: none;
+  }
+  .searchBar .text {
+    background: inherit; /* Set the background color for text items */
+    margin: 5px;
+    color: black; /* Set the text color for text items */
+    padding: 10px 15px 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
   }
 </style>
