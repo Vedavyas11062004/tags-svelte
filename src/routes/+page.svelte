@@ -22,8 +22,14 @@
   }
 
   function addTag(val) {
-    if (filter.includes(val)) {
+    if (!filter.includes(val)) {
       filter = [...filter, { value: val, isTag: true }];
+    } else {
+      document.querySelectorAll(".tag").forEach((tag) => {
+        if (tag.textContent == val) {
+          tag.classList.add("animated", "bounce");
+        }
+      });
     }
     showFilter();
   }
